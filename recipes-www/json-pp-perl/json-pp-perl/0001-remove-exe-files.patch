@@ -1,0 +1,27 @@
+From d2b51fa5d6a5c3183b91d83dc8cc6e2dea2adc20 Mon Sep 17 00:00:00 2001
+From: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Date: Thu, 5 Dec 2024 16:37:54 +0100
+Subject: [PATCH] remove exe files
+
+This is necessary for the native variant of the package, because they
+are already present in the perl-native package.
+
+Signed-off-by: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Upstream-Status: Pending
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index c329829..8d65569 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -19,7 +19,7 @@ WriteMakefile(
+               'Test::More'  => 0,
+               'Scalar::Util' => '1.08'
+     },
+-    'EXE_FILES' => [ 'bin/json_pp' ],
++    'EXE_FILES' => [],
+     'ABSTRACT_FROM' => 'lib/JSON/PP.pm', # retrieve abstract from module
+     'AUTHOR'        => 'Makamaka Hannyaharamitu, E<lt>makamaka[at]cpan.orgE<gt>',
+     ( $ExtUtils::MakeMaker::VERSION >= 6.3002 ? ('LICENSE' => 'perl', ) : () ),
