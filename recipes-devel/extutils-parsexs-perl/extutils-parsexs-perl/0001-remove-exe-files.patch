@@ -1,0 +1,26 @@
+From d9591c108374a3e34fa959b30f3ebd27c98f22f0 Mon Sep 17 00:00:00 2001
+From: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Date: Thu, 5 Dec 2024 15:57:04 +0100
+Subject: [PATCH] remove exe files
+
+This is necessary for the native variant of the package, because they
+are already present in the perl-native package.
+
+Signed-off-by: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Upstream-Status: Pending
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 9cf1e37..d68d41d 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -86,6 +86,6 @@ WriteMakefile(
+     (ABSTRACT_FROM  => 'lib/ExtUtils/ParseXS.pod',
+      AUTHOR         => 'Ken Williams <ken@mathforum.org>') : ()),
+   'INSTALLDIRS' => $whereto,
+-  'EXE_FILES' => ['lib/ExtUtils/xsubpp'],
++  'EXE_FILES' => [],
+   'PL_FILES' => {}
+ );
