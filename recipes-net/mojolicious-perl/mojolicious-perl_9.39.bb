@@ -10,7 +10,7 @@ PACKAGE_NAME=	"Mojolicious"
 MAINTAINER=	"M4SS <edoardo.morandi@m4ss.net>"
 HOMEPAGE=	"https://metacpan.org/dist/${PACKAGE_NAME}"
 
-LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Artistic-2.0;sha256sum=19e2e0f2079ea1ce1576eb4ecc0575b33fe45b2b8e71f4aa589d6bedd1da4e0a"
+LIC_FILES_CHKSUM = "file://LICENSE;md5=e25cec8106f18dc981c1f6a3609df057"
 
 BASE_SRC_URI = "https://cpan.metacpan.org/authors/id/S/SR/SRI/${PACKAGE_NAME}"
 SRC_URI[sha256sum] = "130a490d77d76139f734ce1b894d459bae03805fb1f3dfdd58fc44fe82af3cfd"
