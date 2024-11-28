@@ -23,9 +23,7 @@ UPSTREAM_CHECK_REGEX = "${BASE_SRC_URI}-(?P<pver>\d+(\.\d+){1,2})\.tar\.gz"
 
 inherit cpan allarch
 
-RDEPENDS:${PN} += "\
-    io-socket-ip-perl \
-    scalar-list-utils-perl \
-"
+RDEPENDS:${PN} += "io-socket-ip-perl"
+RDEPENDS:${PN} += "scalar-list-utils-perl"
 
 BBCLASSEXTEND = "native"
