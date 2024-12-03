@@ -6,6 +6,7 @@ Subject: [PATCH] Makefile.PL: avoid execution of openssl
 Do not execute openssl in cross compile environments.
 
 Signed-off-by: Jens Rehsack <sno@netbsd.org>
+Upstream-Status: Pending
 ---
  Makefile.PL | 15 ++-------------
  1 file changed, 2 insertions(+), 13 deletions(-)
