@@ -1,0 +1,30 @@
+From 06931714a12a2f4e971ba2fc28e64e916a38de5e Mon Sep 17 00:00:00 2001
+From: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Date: Thu, 5 Dec 2024 15:44:25 +0100
+Subject: [PATCH] remove exe files
+
+This is necessary for the native variant of the package, because they
+are already present in the perl-native package.
+
+Signed-off-by: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Upstream-Status: Pending
+---
+ Makefile.PL | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index 632d736..2d0f564 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -37,10 +37,7 @@ my %tables =
+            ]
+      );
+ 
+-my @exe_files = qw(bin/enc2xs
+-           bin/piconv
+-           bin/encguess
+-           );
++my @exe_files = qw();
+ my @more_exe_files = qw(
+             unidump
+             );
