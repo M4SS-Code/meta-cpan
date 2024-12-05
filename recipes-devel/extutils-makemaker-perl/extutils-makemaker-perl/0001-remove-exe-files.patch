@@ -1,0 +1,27 @@
+From de3d792265f783d0818d5dc7aec6508fb43090aa Mon Sep 17 00:00:00 2001
+From: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Date: Thu, 5 Dec 2024 16:20:39 +0100
+Subject: [PATCH] remove exe files
+
+This is necessary for the native variant of the package, because they
+are already present in the perl-native package.
+
+Signed-off-by: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Upstream-Status: Pending
+---
+ Makefile.PL | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index cb90886..22c08ea 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -72,7 +72,7 @@ my $MM = WriteMakefile(
+     MIN_PERL_VERSION => '5.006',
+     PMLIBDIRS        => [qw(lib inc)],
+     PMLIBPARENTDIRS  => [qw(lib inc)],         # PMLIBPARENTDIRS is an experimental feature
+-    EXE_FILES        => [qw(bin/instmodsh)],
++    EXE_FILES        => [],
+ 
+     META_MERGE => {
+         no_index => {
