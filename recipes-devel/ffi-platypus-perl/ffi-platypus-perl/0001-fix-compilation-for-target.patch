@@ -1,0 +1,289 @@
+From 1cfbebfbe8704f5cecd6467c471e77b16572b106 Mon Sep 17 00:00:00 2001
+From: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Date: Mon, 11 Dec 2024 16:55:28 +0100
+Subject: [PATCH] fix compilation for target
+
+Upstream-Status: Pending
+Signed-off-by: Edoardo Morandi <edoardo.morandi@m4ss.net>
+---
+ inc/My/Config.pm                | 16 ++++++---
+ inc/mm-config-pb.pl             |  5 ++-
+ inc/mymm.pl                     |  2 +-
+ inc/pdb                         | 10 ++++--
+ lib/FFI/Probe.pm                |  4 ++-
+ lib/FFI/Probe/Runner.pm         |  8 ++++-
+ lib/FFI/Probe/Runner/Builder.pm | 72 +++++++++++++++++++++++++++++++----------
+ 7 files changed, 89 insertions(+), 28 deletions(-)
+
+diff --git a/inc/My/Config.pm b/inc/My/Config.pm
+index 2e1586b..0e4bcdf 100644
+--- a/inc/My/Config.pm
++++ b/inc/My/Config.pm
+@@ -150,11 +150,17 @@ sub probe
+ sub probe_runner
+ {
+   my($self) = @_;
+-  my $builder = FFI::Probe::Runner::Builder->new;
++  my $is_native_build = !!$ENV{YOCTO_IS_BUILDING};
++  my $builder = FFI::Probe::Runner::Builder->new(
++    is_native_build => $is_native_build,
++  );
+   my $exe = $builder->exe;
+   if(-e $exe)
+   {
+-    return FFI::Probe::Runner->new( exe => $exe );
++    return FFI::Probe::Runner->new(
++      exe => $exe,
++      is_native_build => $is_native_build,
++    );
+   }
+   else
+   {
+@@ -164,10 +170,10 @@ sub probe_runner
+ 
+ sub probe_runner_build
+ {
+-  my($self) = @_;
++  my($self, $is_native_build) = @_;
+   my $probe = $self->probe;
+-  my $builder = FFI::Probe::Runner::Builder->new;
+-  foreach my $key (qw( cc ccflags optimize ld ldflags ))
++  my $builder = FFI::Probe::Runner::Builder->new(is_native_build => $is_native_build);
++  foreach my $key (qw( cc ccflags build_ccflags optimize build_optimize ld ldflags build_ldflags ))
+   { @{ $builder->$key } = @{ $self->build_config->get('eumm')->{$key} } }
+   $builder->build unless -e $builder->exe;
+ }
+diff --git a/inc/mm-config-pb.pl b/inc/mm-config-pb.pl
+index fc0ee8f..0b52679 100644
+--- a/inc/mm-config-pb.pl
++++ b/inc/mm-config-pb.pl
+@@ -4,4 +4,7 @@ use lib 'inc';
+ use My::Config;
+ 
+ my $config = My::Config->new;
+-$config->probe_runner_build;
++if (!!$ENV{YOCTO_IS_BUILDING}) {
++    $config->probe_runner_build(1);
++}
++$config->probe_runner_build(0);
+diff --git a/inc/mymm.pl b/inc/mymm.pl
+index 271c6eb..450e7de 100644
+--- a/inc/mymm.pl
++++ b/inc/mymm.pl
+@@ -242,7 +242,7 @@ sub postamble {
+     "flags: _mm${sep}flags\n" .
+     "_mm${sep}flags:\n";
+ 
+-  foreach my $key (qw( cc inc ccflags cccdlflags optimize ld ldflags lddlflags ))
++  foreach my $key (qw( cc inc ccflags build_ccflags cccdlflags optimize build_optimize ld ldflags build_ldflags lddlflags ))
+   {
+     $postamble .=
+       sprintf "\t$noecho\$(FULLPERL) inc${sep}mm-config-set.pl %-20s \$(%s)\n", $key, uc $key;
+diff --git a/inc/pdb b/inc/pdb
+index 7c81c00..3ec3707 100755
+--- a/inc/pdb
++++ b/inc/pdb
+@@ -17,9 +17,15 @@ my $log_filename  = path( $dir, 'config.log' );
+ 
+ my $probe = FFI::Probe->new(
+   runner => do {
+-    my $builder = FFI::Probe::Runner::Builder->new;
++    my $is_native_build = !!$ENV{YOCTO_IS_BUILDING};
++    my $builder = FFI::Probe::Runner::Builder->new(
++      is_native_build => $is_native_build,
++    );
+     my $exe = $builder->exe;
+-    FFI::Probe::Runner->new( exe => $exe );
++    FFI::Probe::Runner->new(
++      exe => $exe,
++      is_native_build => $is_native_build,
++    );
+   },
+   log => "$log_filename",
+   data_filename => "$data_filename",
+diff --git a/lib/FFI/Probe.pm b/lib/FFI/Probe.pm
+index f87618a..7c7ccff 100644
+--- a/lib/FFI/Probe.pm
++++ b/lib/FFI/Probe.pm
+@@ -64,7 +64,9 @@ sub new
+ sub _runner
+ {
+   my($self) = @_;
+-  $self->{runner} ||= FFI::Probe::Runner->new;
++  $self->{runner} ||= FFI::Probe::Runner->new(
++    is_native_build => !!$ENV{YOCTO_IS_BUILDING},
++  );
+ }
+ 
+ 
+diff --git a/lib/FFI/Probe/Runner.pm b/lib/FFI/Probe/Runner.pm
+index e50f2df..af3d665 100644
+--- a/lib/FFI/Probe/Runner.pm
++++ b/lib/FFI/Probe/Runner.pm
+@@ -18,7 +18,13 @@ sub new
+     require FFI::Platypus::ShareConfig;
+     require File::Spec;
+     require Config;
+-    File::Spec->catfile(FFI::Platypus::ShareConfig::dist_dir('FFI::Platypus'), 'probe', 'bin', "dlrun$Config::Config{exe_ext}");
++
++    my $output_suffix;
++    if ($args{is_native_build}) {
++      File::Spec->catfile('blib', 'bin', "dlrun-build$Config::Config{exe_ext}");
++    } else {
++      File::Spec->catfile(FFI::Platypus::ShareConfig::dist_dir('FFI::Platypus'), 'probe', 'bin', "dlrun$output_suffix$Config::Config{exe_ext}");
++    }
+   };
+ 
+   defined $args{flags} or $args{flags} = '-';
+diff --git a/lib/FFI/Probe/Runner/Builder.pm b/lib/FFI/Probe/Runner/Builder.pm
+index 1469c27..58ba002 100644
+--- a/lib/FFI/Probe/Runner/Builder.pm
++++ b/lib/FFI/Probe/Runner/Builder.pm
+@@ -16,20 +16,28 @@ sub new
+ {
+   my($class, %args) = @_;
+ 
+-  $args{dir} ||= 'blib/lib/auto/share/dist/FFI-Platypus/probe';
++  if (!!$args{is_native_build}) {
++    $args{dir} ||= 'blib';
++  } else {
++    $args{dir} ||= 'blib/lib/auto/share/dist/FFI-Platypus/probe';
++  }
+ 
+   my $platform = FFI::Build::Platform->new;
+ 
+   my $self = bless {
+     dir      => $args{dir},
++    is_native_build => !!$args{is_native_build},
+     platform => $platform,
+     # we don't use the platform ccflags, etc because they are geared
+     # for building dynamic libs not exes
+     cc       => [$platform->shellwords($Config{cc})],
+     ld       => [$platform->shellwords($Config{ld})],
+     ccflags  => [$platform->shellwords($Config{ccflags})],
++    build_ccflags  => [$platform->shellwords($Config{build_ccflags})],
+     optimize => [$platform->shellwords($Config{optimize})],
++    build_optimize => [$platform->shellwords($Config{build_optimize})],
+     ldflags  => [$platform->shellwords($Config{ldflags})],
++    build_ldflags  => [$platform->shellwords($Config{build_ldflags})],
+     libs     =>
+       $^O eq 'MSWin32'
+         ? [[]]
+@@ -62,10 +70,14 @@ sub dir
+ 
+ sub cc       { shift->{cc}       }
+ sub ccflags  { shift->{ccflags}  }
++sub build_ccflags { shift->{build_ccflags} }
+ sub optimize { shift->{optimize} }
++sub build_optimize { shift->{build_optimize} }
+ sub ld       { shift->{ld}       }
+ sub ldflags  { shift->{ldflags}  }
++sub build_ldflags { shift->{build_ldflags} }
+ sub libs     { shift->{libs}     }
++sub is_native_build { shift->{is_native_build} }
+ 
+ 
+ sub file
+@@ -83,7 +95,13 @@ my $source;
+ sub exe
+ {
+   my($self) =  @_;
+-  my $xfn = $self->file('bin', "dlrun$Config{exe_ext}");
++  my $output_suffix;
++  if ($self->is_native_build) {
++    $output_suffix = '-build';
++  } else {
++    $output_suffix = '';
++  }
++  my $xfn = $self->file('bin', "dlrun$output_suffix$Config{exe_ext}");
+ }
+ 
+ 
+@@ -186,8 +204,26 @@ sub build
+     ];
+   }
+ 
++  my $output_suffix;
++  my %flags;
++  if ($self->is_native_build) {
++    $output_suffix = '-build';
++    %flags = (
++      ccflags => $self->build_ccflags,
++      optimize => $self->build_optimize,
++      ldflags => $self->build_ldflags,
++    );
++  } else {
++    $output_suffix = '';
++    %flags = (
++      ccflags => $self->ccflags,
++      optimize => $self->optimize,
++      ldflags => $self->ldflags,
++    );
++  }
++
+   my $cfn = $self->file('src', 'dlrun.c');
+-  my $ofn = $self->file('src', "dlrun$Config{obj_ext}");
++  my $ofn = $self->file('src', "dlrun$output_suffix$Config{obj_ext}");
+   my $xfn = $self->exe;
+ 
+   # compile
+@@ -195,19 +231,19 @@ sub build
+   $self->run(
+     compile =>
+       $self->cc,
+-      $self->ccflags,
+-      $self->optimize,
++      $flags{'ccflags'},
++      $flags{'optimize'},
+       '-c',
+       $self->{platform}->flag_object_output($ofn),
+       $cfn,
+   );
+ 
+   # link
+-  print "LD src/dlrun$Config{obj_ext}\n" unless $VERBOSE;
++  print "LD src/dlrun$output_suffix$Config{obj_ext}\n" unless $VERBOSE;
+   $self->run_list(link =>
+     map { [
+       $self->ld,
+-      $self->ldflags,
++      $flags{'ldflags'},
+       $self->{platform}->flag_exe_output($xfn),
+       $ofn,
+       @$_
+@@ -217,23 +253,25 @@ sub build
+   ## FIXME
+   if($^O eq 'MSWin32' && $Config{ccname} eq 'cl')
+   {
+-    if(-f 'dlrun.exe' && ! -f $xfn)
++    if(-f "dlrun$output_suffix.exe" && ! -f $xfn)
+     {
+-      rename 'dlrun.exe', $xfn;
++      rename "dlrun$output_suffix.exe", $xfn;
+     }
+   }
+ 
+-  # verify
+-  print "VV bin/dlrun$Config{exe_ext}\n" unless $VERBOSE;
+-  my $out = $self->run(verify => $xfn, 'verify', 'self');
+-  if($out !~ /dlrun verify self ok/)
+-  {
+-    print $out;
+-    die "verify failed string match";
++  if ($self->is_native_build == !!$ENV{YOCTO_IS_BUILDING}) {
++    # verify
++    print "VV bin/dlrun$output_suffix$Config{exe_ext}\n" unless $VERBOSE;
++    my $out = $self->run(verify => $xfn, 'verify', 'self');
++    if($out !~ /dlrun verify self ok/)
++    {
++      print $out;
++      die "verify failed string match";
++    }
+   }
+ 
+   # remove object
+-  print "UN src/dlrun$Config{obj_ext}\n" unless $VERBOSE;
++  print "UN src/dlrun$output_suffix$Config{obj_ext}\n" unless $VERBOSE;
+   unlink $ofn;
+ 
+   $xfn;
