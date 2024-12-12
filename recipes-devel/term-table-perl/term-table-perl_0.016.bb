@@ -22,4 +22,7 @@ S = "${WORKDIR}/Term-Table-${PV}"
 
 inherit cpan allarch
 
+RDEPENDS:${PN} += "carp-perl"
+RDEPENDS:${PN} += "scalar-list-utils-perl"
+
 BBCLASSEXTEND = "native"
