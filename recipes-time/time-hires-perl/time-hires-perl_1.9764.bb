@@ -24,4 +24,11 @@ S = "${WORKDIR}/Time-HiRes-${PV}"
 
 inherit cpan
 
+RDEPENDS:${PN} += "carp-perl"
+RDEPENDS:${PN} += "exporter-perl"
+RDEPENDS:${PN} += "extutils-makemaker-perl"
+RDEPENDS:${PN} += "pathtools-perl"
+RDEPENDS:${PN} += "test-simple-perl"
+RDEPENDS:${PN} += "xsloader-perl"
+
 BBCLASSEXTEND = "native"
