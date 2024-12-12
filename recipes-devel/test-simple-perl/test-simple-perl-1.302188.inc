@@ -18,3 +18,11 @@ SRC_URI[sha256sum] = "0b7a0e304ca24d657d79b73c9ff3f381dc460f356e4044de326ed03dda
 S = "${WORKDIR}/Test-Simple-${PV}"
 
 inherit cpan allarch
+
+RDEPENDS:${PN} += "data-dumper-perl"
+RDEPENDS:${PN} += "exporter-perl"
+RDEPENDS:${PN} += "pathtools-perl"
+RDEPENDS:${PN} += "file-temp-perl"
+RDEPENDS:${PN} += "storable-perl"
+RDEPENDS:${PN} += "term-table-perl"
+RDEPENDS:${PN} += "time-hires-perl"
