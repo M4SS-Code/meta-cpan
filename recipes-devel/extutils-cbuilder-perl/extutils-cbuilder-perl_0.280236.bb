@@ -24,4 +24,12 @@ S = "${WORKDIR}/ExtUtils-CBuilder-${PV}"
 
 inherit cpan allarch
 
+RDEPENDS:${PN} += "pathtools-perl"
+RDEPENDS:${PN} += "extutils-makemaker-perl"
+RDEPENDS:${PN} += "file-temp-perl"
+RDEPENDS:${PN} += "io-perl"
+RDEPENDS:${PN} += "ipc-cmd-perl"
+RDEPENDS:${PN} += "perl-ostype-perl"
+RDEPENDS:${PN} += "text-parsewords-perl"
+
 BBCLASSEXTEND = "native"
