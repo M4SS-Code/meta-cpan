@@ -23,4 +23,11 @@ S = "${WORKDIR}/Capture-Tiny-${PV}"
 
 inherit cpan allarch
 
+DEPENDS += "carp-perl"
+DEPENDS += "exporter-perl"
+DEPENDS += "pathtools-perl"
+DEPENDS += "file-temp-perl"
+DEPENDS += "io-perl"
+DEPENDS += "scalar-list-utils-perl"
+
 BBCLASSEXTEND = "native"
