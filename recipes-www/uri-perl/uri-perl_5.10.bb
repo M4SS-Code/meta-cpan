@@ -22,4 +22,16 @@ S = "${WORKDIR}/URI-${PV}"
 
 inherit cpan allarch
 
+RDEPENDS:${PN} += "carp-perl"
+RDEPENDS:${PN} += "pathtools-perl"
+RDEPENDS:${PN} += "data-dumper-perl"
+RDEPENDS:${PN} += "encode-perl"
+RDEPENDS:${PN} += "exporter-perl"
+RDEPENDS:${PN} += "mime-base32-perl"
+RDEPENDS:${PN} += "mime-base64-perl"
+RDEPENDS:${PN} += "libnet-perl"
+RDEPENDS:${PN} += "scalar-list-utils-perl"
+RDEPENDS:${PN} += "constant-perl"
+RDEPENDS:${PN} += "parent-perl"
+
 BBCLASSEXTEND = "native"
