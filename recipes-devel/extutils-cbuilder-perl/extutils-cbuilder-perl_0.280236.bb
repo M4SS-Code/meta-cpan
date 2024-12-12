@@ -26,6 +26,7 @@ inherit cpan allarch
 
 RDEPENDS:${PN} += "pathtools-perl"
 RDEPENDS:${PN} += "extutils-makemaker-perl"
+RDEPENDS:${PN} += "perl-module-file-basename"
 RDEPENDS:${PN} += "file-temp-perl"
 RDEPENDS:${PN} += "io-perl"
 RDEPENDS:${PN} += "ipc-cmd-perl"
