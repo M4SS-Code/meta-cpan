@@ -24,4 +24,10 @@ S = "${WORKDIR}/HTTP-Tiny-${PV}"
 
 inherit cpan allarch
 
+RDEPENDS:${PN} += "carp-perl"
+RDEPENDS:${PN} += "io-perl"
+RDEPENDS:${PN} += "mime-base64-perl"
+RDEPENDS:${PN} += "socket-perl"
+RDEPENDS:${PN} += "time-local-perl"
+
 BBCLASSEXTEND = "native"
