@@ -1,0 +1,28 @@
+From 42248107b8aa3cf052b9ec5ca731a752802f8181 Mon Sep 17 00:00:00 2001
+From: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Date: Tue, 17 Dec 2024 15:40:44 +0100
+Subject: [PATCH] use build envs when detecting ct features
+
+Signed-off-by: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Upstream-Status: Pending
+---
+ xs/typesize.pl | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/xs/typesize.pl b/xs/typesize.pl
+index e3ebd26..c240438 100644
+--- a/xs/typesize.pl
++++ b/xs/typesize.pl
+@@ -32,10 +32,10 @@ foreach my $type (@types)
+   print $out "}\n";
+   close $out;
+   
+-  run("$Config{cc} $Config{ccflags} -c -o $obj $src");
++  run("$ENV{BUILD_CC} $ENV{BUILD_CFLAGS} -c -o $obj $src");
+   next if $?;
+   
+-  run("$Config{ld} $Config{ldflags} -o $bin $obj");
++  run("$ENV{BUILD_CCLD} $ENV{BUILD_LDFLAGS} -o $bin $obj");
+   next if $?;
+   
+   run($bin, 'bogus'); # avoid calling the shell
