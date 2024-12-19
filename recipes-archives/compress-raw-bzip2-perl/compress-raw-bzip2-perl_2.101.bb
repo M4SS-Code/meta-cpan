@@ -16,18 +16,10 @@ SRC_URI = "https://cpan.metacpan.org/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.1
 SRC_URI[md5sum] = "3ffb5f313beb810004b185e7e1570349"
 SRC_URI[sha256sum] = "0c9b134fd388290e30e90fc9f63900966127f98e76b054ecd481eb3b5500b8d8"
 
-DEPENDS += "bzip2"
-
 S = "${WORKDIR}/Compress-Raw-Bzip2-${PV}"
 
 inherit cpan
 
-export BUILD_BZIP2="0"
-export BZIP2_INCLUDE="-I${STAGING_DIR_HOST}${includedir}"
-
-do_compile() {
-	export LIBC="$(find ${STAGING_DIR_TARGET}/${base_libdir}/ -name 'libc-*.so')"
-	cpan_do_compile
-}
+RDEPENDS:${PN} += "bzip2"
 
 BBCLASSEXTEND = "native"
