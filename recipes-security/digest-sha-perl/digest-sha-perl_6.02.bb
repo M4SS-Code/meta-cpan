@@ -26,4 +26,6 @@ ALTERNATIVE_PRIORITY = "100"
 ALTERNATIVE:${PN} = "shasum"
 ALTERNATIVE_LINK_NAME[shasum] = "${bindir}/shasum"
 
+RDEPENDS:${PN} += "perl-module-filehandle"
+
 BBCLASSEXTEND = "native"
