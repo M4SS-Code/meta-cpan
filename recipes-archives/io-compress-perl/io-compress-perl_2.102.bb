@@ -22,4 +22,9 @@ S = "${WORKDIR}/IO-Compress-${PV}"
 
 inherit cpan allarch
 
+do_install:append:class-native() {
+    rm ${D}/${bindir}/zipdetails \
+        ${D}/${bindir}/streamzip
+}
+
 BBCLASSEXTEND = "native"
