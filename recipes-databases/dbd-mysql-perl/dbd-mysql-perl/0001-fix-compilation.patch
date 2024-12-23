@@ -1,0 +1,43 @@
+From 657e3194d8e64abf3305f0b0b14fda8e2c244627 Mon Sep 17 00:00:00 2001
+From: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Date: Mon, 23 Dec 2024 16:42:39 +0100
+Subject: [PATCH] fix compilation
+
+Credits to the DBD-MariaDB package.
+
+Signed-off-by: Edoardo Morandi <edoardo.morandi@m4ss.net>
+Upstream-Status: Pending
+---
+ Makefile.PL | 11 +++++++++++
+ dbdimp.c    |  8 --------
+ 2 files changed, 11 insertions(+), 8 deletions(-)
+
+diff --git a/Makefile.PL b/Makefile.PL
+index fb5fa3d..72a4263 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -19,6 +19,13 @@ require DBI::DBD;
+ 
+ my $TESTDB = "test";
+ 
++# From DBD-MariaDB Makefile.PL
++# On WIN32 windows.h and winsock.h need to be included before mysql.h
++# Otherwise SOCKET type which is needed for mysql.h is not defined
++my @mysql_headers;
++push @mysql_headers, 'windows.h', 'winsock.h' if $^O eq 'MSWin32';
++push @mysql_headers, 'mysql.h';
++
+ our $opt = { "help" => \&Usage, };
+ 
+ {
+@@ -209,6 +216,10 @@ print "Checking if libs are available for compiling...\n";
+ 
+ assert_lib(
+   LIBS => ($opt->{'embedded'} ? $opt->{'embedded'} : $opt->{libs}),
++  ccflags => (join ' ', $opt->{cflags}, ($Config{usedl} ? $Config{cccdlflags} : ())),
++  ldflags => (join ' ', $opt->{libs}, ($Config{usedl} ? $Config{lddlflags} : ())),
++  header => \@mysql_headers,
++  not_execute => 1,
+ );
+ 
+ print "Looks good.\n\n";
