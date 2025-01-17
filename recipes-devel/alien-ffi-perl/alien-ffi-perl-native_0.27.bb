@@ -12,10 +12,7 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=7f7b6cc4aab12d0a8cb6a9ffefb49cfa"
 BASE_SRC_URI = "https://cpan.metacpan.org/authors/id/P/PL/PLICEASE/${PACKAGE_NAME}"
 SRC_URI[sha256sum] = "29bb2083f3f982a39f4852243f4f6a11916966f20e6e77864e99269d11e8b65e"
 
-SRC_URI = "\
-    ${BASE_SRC_URI}-${PV}.tar.gz \
-    file://0001-Configure-for-cross-compilation.patch \
-"
+SRC_URI = "${BASE_SRC_URI}-${PV}.tar.gz"
 S = "${WORKDIR}/${PACKAGE_NAME}-${PV}"
 
 UPSTREAM_CHECK_URI = "${HOMEPAGE}"
