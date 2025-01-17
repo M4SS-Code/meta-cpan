@@ -14,7 +14,7 @@ HOMEPAGE=	"https://metacpan.org/release/XML-LibXML"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/Artistic-1.0;md5=cda03bbdc3c1951996392b872397b798 \
 file://${COMMON_LICENSE_DIR}/GPL-1.0-or-later;md5=30c0b8a5048cc2f4be5ff15ef0d8cf61"
 
-SRC_URI = "https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0207.tar.gz"
+SRC_URI = "https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/XML-LibXML-${PV}.tar.gz"
 
 SRC_URI[md5sum] = "d943c3ff20e19c376f08adcbc4158019"
 SRC_URI[sha256sum] = "903436c9859875bef5593243aae85ced329ad0fb4b57bbf45975e32547c50c15"
