@@ -16,8 +16,8 @@ file://${COMMON_LICENSE_DIR}/GPL-1.0-or-later;md5=30c0b8a5048cc2f4be5ff15ef0d8cf
 
 SRC_URI = "https://cpan.metacpan.org/authors/id/S/SH/SHLOMIF/XML-LibXML-${PV}.tar.gz"
 
-SRC_URI[md5sum] = "d943c3ff20e19c376f08adcbc4158019"
-SRC_URI[sha256sum] = "903436c9859875bef5593243aae85ced329ad0fb4b57bbf45975e32547c50c15"
+SRC_URI[md5sum] = "d2bad7f395716a6f57abde538d47008c"
+SRC_URI[sha256sum] = "a29bf3f00ab9c9ee04218154e0afc8f799bf23674eb99c1a9ed4de1f4059a48d"
 DEPENDS += "libxml2"
 DEPENDS += "libxml-sax-perl-native"
 DEPENDS += "zlib"
