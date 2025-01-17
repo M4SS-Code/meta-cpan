@@ -21,13 +21,27 @@ SRC_URI[sha256sum] = "a29bf3f00ab9c9ee04218154e0afc8f799bf23674eb99c1a9ed4de1f40
 DEPENDS += "libxml2"
 DEPENDS += "libxml-sax-perl-native"
 DEPENDS += "zlib"
+DEPENDS += "alien-build-perl-native"
+DEPENDS += "alien-libxml2-perl-native"
 RDEPENDS:${PN} += "libxml2"
-RDEPENDS:${PN} += "xml-sax-base-perl"
-RDEPENDS:${PN} += "xml-sax-perl"
+RDEPENDS:${PN} += "carp-perl"
+RDEPENDS:${PN} += "encode-perl"
+RDEPENDS:${PN} += "exporter-perl"
+RDEPENDS:${PN} += "io-perl"
+RDEPENDS:${PN} += "scalar-list-utils-perl"
 RDEPENDS:${PN} += "xml-namespacesupport-perl"
+RDEPENDS:${PN} += "xml-sax-perl"
+RDEPENDS:${PN} += "xml-sax-base-perl"
+RDEPENDS:${PN} += "base-perl"
+RDEPENDS:${PN} += "constant-perl"
+RDEPENDS:${PN} += "parent-perl"
 
 S = "${WORKDIR}/XML-LibXML-${PV}"
 
 inherit cpan
+
+do_configure:append:class-target () {
+    sed -E -i "s#([a-Z0-9_/.-]+?)(/ExtUtils/typemap)(\$|[^a-Z0-9_/.-])#${RECIPE_SYSROOT_NATIVE}\1\2\3#" Makefile
+}
 
 BBCLASSEXTEND = "native"
