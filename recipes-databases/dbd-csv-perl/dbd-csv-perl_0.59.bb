@@ -18,7 +18,7 @@ SRC_URI = "https://cpan.metacpan.org/authors/id/H/HM/HMBRAND/DBD-CSV-0.59.tgz"
 
 SRC_URI[md5sum] = "0142b6f3a1f8c4ddb13b9a2a004cd9e9"
 SRC_URI[sha256sum] = "2a5fadd1d50c18ea023560d39c2cc660ae2a65fa99d9b8244edca7d2dcce9dc0"
-RDEPENDS:${PN} += "dbi-perl"
+RDEPENDS:${PN} += "libdbi-perl"
 RDEPENDS:${PN} += "sql-statement-perl"
 RDEPENDS:${PN} += "text-csv-xs-perl"
 RECOMMENDS += "test-simple-perl-native"

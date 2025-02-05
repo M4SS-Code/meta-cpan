@@ -16,10 +16,10 @@ SRC_URI = "https://cpan.metacpan.org/authors/id/I/IS/ISHIGAKI/DBD-SQLite-1.70.ta
 SRC_URI[md5sum] = "cc20dad09474da382488686ea07e8288"
 SRC_URI[sha256sum] = "40fd8ddf539e0e773a7a4e6d376794c3301459f9ab0050978bdcf97113dafe3e"
 
-DEPENDS += "dbi-perl-native"
+DEPENDS += "libdbi-perl-native"
 DEPENDS += "sqlite3"
 
-RDEPENDS:${PN} += "dbi-perl sqlite3"
+RDEPENDS:${PN} += "libdbi-perl sqlite3"
 RDEPENDS:${PN} += "perl-module-constant perl-module-locale perl-module-tie-hash"
 
 S = "${WORKDIR}/DBD-SQLite-${PV}"
