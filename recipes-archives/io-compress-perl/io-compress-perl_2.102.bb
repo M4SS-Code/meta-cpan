@@ -15,8 +15,8 @@ SRC_URI = "https://cpan.metacpan.org/authors/id/P/PM/PMQS/IO-Compress-2.102.tar.
 
 SRC_URI[md5sum] = "b79ef532ba8b6c1672dc2a401715f5cf"
 SRC_URI[sha256sum] = "d6fa7f9a5beee446452a0fbc43589a0c73fe7e925c075b98628b018048dc72a4"
-RDEPENDS:${PN} += "compress-raw-bzip2-perl"
-RDEPENDS:${PN} += "compress-raw-zlib-perl"
+RDEPENDS:${PN} += "perl-module-compress-raw-bzip2"
+RDEPENDS:${PN} += "perl-module-compress-raw-zlib"
 
 S = "${WORKDIR}/IO-Compress-${PV}"
 
