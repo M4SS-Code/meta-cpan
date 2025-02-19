@@ -16,7 +16,15 @@ SRC_URI = "https://cpan.metacpan.org/authors/id/E/ET/ETHER/B-Hooks-EndOfScope-0.
 SRC_URI[md5sum] = "d753cef006468e71205d14a472c0011e"
 SRC_URI[sha256sum] = "da1b6a9f7c7424776363182f9673e666b06136f13dc744241f7adce3d1ad0c1a"
 RDEPENDS:${PN} += "module-implementation-perl"
+RDEPENDS:${PN} += "perl-module-scalar-util"
 RDEPENDS:${PN} += "sub-exporter-progressive-perl"
+RDEPENDS:${PN} += "perl-module-strict"
+RDEPENDS:${PN} += "perl-module-warnings"
+RDEPENDS:${PN} += "variable-magic-perl"
+RDEPENDS:${PN} += "perl-module-constant"
+RDEPENDS:${PN} += "perl-module-carp"
+RDEPENDS:${PN} += "perl-module-tie-hash"
+RDEPENDS:${PN} += "perl-module-hash-util-fieldhash"
 
 S = "${WORKDIR}/B-Hooks-EndOfScope-${PV}"
 
